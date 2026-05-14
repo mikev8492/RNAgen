@@ -1,0 +1,89 @@
+================
+Program logic:
+================
+1. Generate random codons:
+    - use random.choice to pick a nucleotide from a list 
+2. Build complete and partial ORFs
+    - generate a random ORF length based on min/max arguments
+    - if argument complete is true:
+        - generate ORf with start + random bases + stop codon
+    - else:
+        - generate a partial ORF with all random bases
+
+3. Add flanking sequences
+    - Assemble a complete sequence: ORFs + random 
+4. calculate metadata (GC content, amibiguity)
+5. Write to FASTA format
+
+================
+Execution Flow:
+================
+    User runs main.py with CLI arguments
+    ├──Arguments parsed and validated
+    ├──Simulator object initialized
+    └── FOR each sequence:
+        ├──Generate ORF (complete or partial)
+        ├──Optionally add flanking regions
+        ├──Compute GC and ambiguity
+        └──Calculate and store metadata
+    ├──All sequences written to FASTA file
+    └──Program exits with success or error code
+
+
+===================
+Global Definitions:
+===================
+valid nucleotides: A,U,C,G
+IUPAC ambiguous nucleotides: ["N", "R", "Y", "S", "W", "K", "M", "B", "D", "H", "V"]
+Start codon: AUG
+Stop codons: ["UAA", "UAG", "UGA"]
+
+==================
+Library functions:
+==================
+- get_gc_content:
+    - Calculates GC%
+        - counts G and C in sequence, divided by length of the sequence
+        - convert to a percent
+
+- get_ambiguity_content:
+    - Calculates percent of IUPAC ambiguous codes   
+        - counts number of ambiguous nucleotides, divided by length of the sequence. 
+        - convert to percent
+
+- generate_random_codon:
+    - Generates a 3-nucleotide codon    
+        - Use random module to choose from list of nucleotides
+        - return codon
+
+- is_start_codon:
+    - checks if codon is AUG
+- is_stop_codon:
+    - checks if codon is a stop codon
+
+- generate_random_sequence:
+    - Generates a ranndom RNA sequence
+        - uses random module to choose from nucleotides and append up to the specified length
+
+- write_fasta:
+    - writes a list of sequences to a fasta file
+        - 
+
+
+================
+Testing:
+================
+    python src/main.py 
+        creates sequences.fasta with 10 sequences
+    python src/main.py -o test.fasta 
+        saves to test.fasta
+    python src/main.py -n 5 
+        creates 5 sequences
+    python src/main.py --min-length 200 --max-length 500 
+        respects ranges
+    python src/main.py --min-length 1000 --max-length 100
+        shows error
+    python src/main.py --help 
+        shows usage
+    conda env create -f environment.yml
+        recreates environment
